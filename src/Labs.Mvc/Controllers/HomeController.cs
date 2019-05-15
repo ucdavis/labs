@@ -26,8 +26,8 @@ namespace Labs.Mvc.Controllers
             const string conn = "";
             using (var db = new DbManager(conn)) {
 
-                var result = db.Connection.Query("select * from abc");
-                return Json(new {});
+                var result = db.Connection.Query(Queries.CardholdInfo, new { ids = new [] { "999811562" }});
+                return Json(result);
             }
         }
 
