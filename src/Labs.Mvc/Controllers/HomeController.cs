@@ -19,9 +19,15 @@ namespace Labs.Mvc.Controllers
         {
             this.configuration = configuration;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var conn = this.configuration.GetConnectionString("DefaultConnection");
+            
+            using (var db = new DbManager(conn)) {
+
+                var terms  = await db.Connection.QueryAsync<TermsModel>(Queries.Terms);
+                return View(terms.ToList());
+            }
         }
 
         public IActionResult Privacy()
@@ -29,6 +35,7 @@ namespace Labs.Mvc.Controllers
             return View();
         }
 
+        [HttpGet]
         public IActionResult Query() {
             var conn = this.configuration.GetConnectionString("DefaultConnection");
             

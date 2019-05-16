@@ -2,7 +2,7 @@ public static class Queries
 {
     public static string Terms = @"
         select * from openquery (sis, '
-            select* from stvterm
+            select stvterm_code as code, stvterm_desc as description, stvterm_start_date as startdate, stvterm_end_date as enddate from stvterm
             where stvterm_end_date > sysdate
             and rownum< 20
             order by stvterm_start_date asc
