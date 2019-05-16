@@ -32,7 +32,8 @@ namespace Labs.Mvc.Controllers
             }
         }
 
-        public async Task<IActionResult> Search(BulkModel model)
+        [HttpPost]
+        public async Task<IActionResult> Index(BulkModel model)
         {
             var conn = this.configuration.GetConnectionString("DefaultConnection");
             
@@ -43,7 +44,7 @@ namespace Labs.Mvc.Controllers
                 var cards = await db.Connection.QueryAsync<CardModel>(Queries.CardholdInfo, new { ids = studentIds });
                 model.Results.Cards = cards.ToList();
                 model.Results.Students = students.ToList();
-                return Json(model);
+                return View(model);
             }
         }
 

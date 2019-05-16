@@ -7,7 +7,7 @@
 
 <div class="col">
     <h1 class="display-4">Welcome</h1>
-    <form asp-action="Search" method="get">
+    <form asp-action="Index" method="post">
         <div className="form-horizontal">
             <div class="form-group">
                 <select asp-for="SearchTerm" class="form-control">
@@ -26,3 +26,33 @@
         </div>
     </form>
 </div>
+
+@if (Model.Results != null && Model.Results.Students != null && Model.Results.Students.Count > 0)
+{
+    <div style="padding-top: 15px">
+        <div class="card">
+            <div class="card-header">
+                <h2>Students</h2>
+                @foreach(var student in Model.Results.Students)
+                {
+                    <p>@student.FirstName @student.LastName</p>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@if (Model.Results != null && Model.Results.Cards != null && Model.Results.Cards.Count > 0)
+{
+    <div style="padding-top: 15px">
+        <div class="card">
+            <div class="card-header">
+                <h2>Cards</h2>
+                @foreach(var card in Model.Results.Cards)
+                {
+                    <p>@card.strFirstName @card.strLastName</p>
+                }
+            </div>                
+        </div>
+    </div>
+}
