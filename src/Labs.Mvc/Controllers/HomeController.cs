@@ -7,11 +7,18 @@ using Microsoft.AspNetCore.Mvc;
 using Labs.Mvc.Models;
 using AnlabMvc.Helpers;
 using Dapper;
+using Microsoft.Extensions.Configuration;
 
 namespace Labs.Mvc.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IConfiguration configuration;
+
+        public HomeController(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
         public IActionResult Index()
         {
             return View();
@@ -23,7 +30,8 @@ namespace Labs.Mvc.Controllers
         }
 
         public IActionResult Query() {
-            const string conn = "";
+            var conn = this.configuration.GetConnectionString("DefaultConnection");
+            
             using (var db = new DbManager(conn)) {
 
                 var result = db.Connection.Query(Queries.CardholdInfo, new { ids = new [] { "999811562" }});
