@@ -1,15 +1,28 @@
 ﻿@using Labs.Mvc.Models
-@model IList<TermsModel>
+@model BulkModel
 
 @{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
+<div class="col">
     <h1 class="display-4">Welcome</h1>
-    <div>
-        @foreach( var term in Model) {
-            <p>@term.Description</p>
-        }
-    </div>
+    <form asp-action="Search" method="get">
+        <div className="form-horizontal">
+            <div class="form-group">
+                <select asp-for="SearchTerm" class="form-control">
+                    @foreach( var term in Model.Terms) {
+                        <option value="@term.Code">@term.Description</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <textarea asp-for="SearchCourses" class="form-control"></textarea>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Submit" class="btn btn-default" />
+            </div>
+        </div>
+    </form>
 </div>

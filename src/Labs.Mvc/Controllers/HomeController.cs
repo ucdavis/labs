@@ -25,8 +25,25 @@ namespace Labs.Mvc.Controllers
             
             using (var db = new DbManager(conn)) {
 
-                var terms  = await db.Connection.QueryAsync<TermsModel>(Queries.Terms);
-                return View(terms.ToList());
+                var terms  = await db.Connection.QueryAsync<TermModel>(Queries.Terms);
+                var model = new BulkModel();
+                model.Terms = terms.ToList();
+                return View(model);
+            }
+        }
+
+        public async Task<IActionResult> Search(BulkModel model)
+        {
+            var conn = this.configuration.GetConnectionString("DefaultConnection");
+            
+            using (var db = new DbManager(conn)) {
+
+                var students  = await db.Connection.QueryAsync<StudentModel>(Queries.StudentsForCourse(model.SearchCourses, model.SearchTerm));
+                var studentIds = students.Select(x => x.Id).ToList();
+                var cards = await db.Connection.QueryAsync<CardModel>(Queries.CardholdInfo, new { ids = studentIds });
+                model.Results.Cards = cards.ToList();
+                model.Results.Students = students.ToList();
+                return Json(model);
             }
         }
 

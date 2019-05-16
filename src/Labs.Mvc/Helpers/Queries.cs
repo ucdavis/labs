@@ -11,7 +11,7 @@ public static class Queries
     public static string StudentsForCourse(string crn, string term)
     {
         string query = $@"select * from openquery (sis, '
-            select sfrstcr_term_code, sfrstcr_crn, spriden_first_name, spriden_last_name, spriden_id, lower(wormoth_login_id) loginid
+            select sfrstcr_term_code, sfrstcr_crn, spriden_first_name as firstname, spriden_last_name as lastname, spriden_id as id, lower(wormoth_login_id) loginid
             from sfrstcr
             inner join spriden on sfrstcr_pidm = spriden_pidm
             inner join wormoth on sfrstcr_pidm = wormoth_pidm

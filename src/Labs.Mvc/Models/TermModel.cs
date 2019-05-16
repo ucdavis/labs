@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Labs.Mvc.Models
 {
-    public class TermsModel
+    public class TermModel
     {
         public string Code { get; set; }
         public string Description { get; set; }
