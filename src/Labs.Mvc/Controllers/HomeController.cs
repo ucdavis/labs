@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -74,8 +74,8 @@ namespace Labs.Mvc.Controllers
                                 strCardFormatName = item.strCardFormatName
                              };
                 model.Terms = terms.ToList();
-                model.Results.StudentsWithCards = result.Where(x => !String.IsNullOrEmpty(x.CardId)).ToList();
-                model.Results.StudentsWithoutCards = result.Where(x => String.IsNullOrEmpty(x.CardId)).ToList();
+                model.StudentsWithCards = result.Where(x => !String.IsNullOrEmpty(x.CardId)).ToList();
+                model.StudentsWithoutCards = result.Where(x => String.IsNullOrEmpty(x.CardId)).ToList();
 
                 return View(model);
             }

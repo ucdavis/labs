@@ -31,19 +31,19 @@
     </form>
 </div>
 
-@if (Model.Results != null && Model.Results.StudentsWithCards != null && Model.Results.StudentsWithCards.Count > 0)
+@if (Model.StudentsWithCards != null && Model.StudentsWithCards.Count > 0)
 {
     <div style="padding-top: 15px">
         <div class="card">
             <div class="card-header">
                 <h2>Students With Cards</h2>
-                <table class="table dataTable">
+                <table id="results" class="table dataTable">
                     <thead>
                         <tr>
                             <td>Employee ID</td>
                             <td>Last Name</td>
                             <td>First Name</td>
-                            <td>Department</td>
+                            <td>Dept</td>
                             <td>Encoded Card No.</td>
                             <td>Expiration</td>
                             <td>Active</td>
@@ -55,7 +55,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach(var student in Model.Results.StudentsWithCards)
+                        @foreach(var student in Model.StudentsWithCards)
                         {
                         <tr>
                             <td>@student.Id</td>
@@ -80,13 +80,13 @@
     </div>
 }
 
-@if (Model.Results != null && Model.Results.StudentsWithoutCards != null && Model.Results.StudentsWithoutCards.Count > 0)
+@if (Model.StudentsWithoutCards != null && Model.StudentsWithoutCards.Count > 0)
 {
     <div style="padding-top: 15px">
         <div class="card">
             <div class="card-header">
                 <h2>Students</h2>
-                @foreach(var student in Model.Results.StudentsWithoutCards)
+                @foreach(var student in Model.StudentsWithoutCards)
                 {
                     <p>@student.FirstName @student.LastName</p>
                     <p>@student.CardId</p>
@@ -94,4 +94,56 @@
             </div>
         </div>
     </div>
+}
+
+@section Scripts
+{
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+
+
+    <script type="text/javascript">
+        $(function() {
+            var table = $("#results").DataTable({
+                "dom": 'lBfrtip',
+            });
+
+            $('#results tbody').on('click',
+                'tr',
+                function() {
+                    var data = table.row(this).data();;
+
+                    var tableDetails = $("#table-details");
+                    tableDetails.empty();
+                    $.each(data,
+                        function(index, value) {
+                            if (showCols.indexOf(index) > -1) {
+                                var lab = table.column(index).header().innerText;
+
+                                tableDetails.append("<tr><td>" + lab + "</td><td>" + value + "</td></tr>");
+                            }
+                        });
+
+                    $('#exampleModalLong').trigger('focus');
+                });
+        });
+
+
+    </script>
+}
+
+@section Styles
+    {
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css" />
+    <style>
+        .dt-buttons {
+            padding-left: 50px;
+            padding-bottom: 20px;
+        }
+    </style>
 }
