@@ -13,5 +13,7 @@ namespace Labs.Mvc.Models
         public string Id { get; set; }
 
         public string LoginId { get; set; }
+
+        //TODO add email, program type
     }
 }
