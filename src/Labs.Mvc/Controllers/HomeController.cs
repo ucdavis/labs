@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -44,17 +44,12 @@ namespace Labs.Mvc.Controllers
             var conn = this.configuration.GetConnectionString("DefaultConnection");
 
             const string regex = @"\d{5}";
-            var courses = System.Text.RegularExpressions.Regex.Matches(model.SearchCourses, regex);
+            var courses = System.Text.RegularExpressions.Regex.Matches(model.SearchCourses, regex).Select(x => x.Value).ToArray();
             using (var db = new DbManager(conn))
             {
 
                 var terms = await db.Connection.QueryAsync<TermModel>(Queries.Terms);
-                var students = new List<StudentModel>();
-                foreach (var course in courses)
-                {
-                    var studentsFromCourse = await db.Connection.QueryAsync<StudentModel>(Queries.StudentsForCourse(course.ToString(), model.SearchTerm));
-                    students.AddRange(studentsFromCourse.ToList());
-                }
+                var students = await db.Connection.QueryAsync<StudentModel>(Queries.StudentsForCourse(courses, model.SearchTerm));
 
                 var studentIds = students.Select(x => x.Id).ToList().Distinct();
                 var cards = await db.Connection.QueryAsync<CardModel>(Queries.CardholdInfo, new { ids = studentIds });
