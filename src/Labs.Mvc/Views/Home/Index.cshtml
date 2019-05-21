@@ -1,8 +1,150 @@
-﻿@{
+﻿@using Labs.Mvc.Models
+@model BulkModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
+<div class="col">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <form asp-action="Index" method="post">
+        <div className="form-horizontal">
+            @for (int i = 0; i < Model.Terms.Count; i++)
+            {
+                @Html.HiddenFor(m => m.Terms[i])
+            }
+            <div class="form-group">
+                <select asp-for="SearchTerm" class="form-control">
+                    @foreach( var term in Model.Terms) {
+                        <option value="@term.Code">@term.Description</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <textarea asp-for="SearchCourses" class="form-control"></textarea>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+        </div>
+    </form>
 </div>
+
+@if (Model.StudentsWithoutCards != null && Model.StudentsWithoutCards.Count > 0)
+{
+    <div style="padding-top: 15px">
+        <div class="card">
+            <div class="card-header">
+                <h2>Students Without Cards</h2>
+                <table id="without" class="table dataTable">
+                    <thead>
+                        <tr>
+                            <td>Employee ID</td>
+                            <td>Last Name</td>
+                            <td>First Name</td>
+                            <td>Kerb</td>
+                            <td>Email</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach(var student in Model.StudentsWithCards)
+                        {
+                        <tr>
+                            <td>@student.Id</td>
+                            <td>@student.LastName</td>
+                            <td>@student.FirstName</td>
+                            <td>@student.LoginId</td>
+                            <td>example@email.com</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+
+@if (Model.StudentsWithCards != null && Model.StudentsWithCards.Count > 0)
+{
+    <div style="padding-top: 15px">
+        <div class="card">
+            <div class="card-header">
+                <h2>Students With Cards</h2>
+                <table id="with" class="table dataTable">
+                    <thead>
+                        <tr>
+                            <td>Employee ID</td>
+                            <td>Last Name</td>
+                            <td>First Name</td>
+                            <td>Dept</td>
+                            <td>Encoded Card No.</td>
+                            <td>Expiration</td>
+                            <td>Active</td>
+                            <td>Access 1</td>
+                            <td>Access 2</td>
+                            <td>Facility</td>
+                            <td>Format</td>
+                            <td>Email</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach(var student in Model.StudentsWithCards)
+                        {
+                        <tr>
+                            <td>@student.Id</td>
+                            <td>@student.LastName</td>
+                            <td>@student.FirstName</td>
+                            <td>@student.Department</td>
+                            <td>@student.strEncodedCardNumber</td>
+                            <td>@student.dtExpirationDate</td>
+                            <td>@student.nActive</td>
+                            <td>@student.Access1</td>
+                            <td>@student.Access2</td>
+                            <td>@student.nFacilityCode</td>
+                            <td>@student.strCardFormatName</td>
+                            <td>email</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table> 
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts
+{
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+
+
+    <script type="text/javascript">
+        $(function() {
+            var table = $("#with").DataTable({
+                "dom": 'lBfrtip',
+            });
+            var table = $("#without").DataTable({
+                "dom": 'lBfrtip',
+            });
+        });
+
+
+    </script>
+}
+
+@section Styles
+    {
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css" />
+    <style>
+        .dt-buttons {
+            padding-left: 50px;
+            padding-bottom: 20px;
+        }
+    </style>
+}

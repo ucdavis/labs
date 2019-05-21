@@ -2,21 +2,22 @@ public static class Queries
 {
     public static string Terms = @"
         select * from openquery (sis, '
-            select* from stvterm
+            select stvterm_code as code, stvterm_desc as description, stvterm_start_date as startdate, stvterm_end_date as enddate from stvterm
             where stvterm_end_date > sysdate
             and rownum< 20
             order by stvterm_start_date asc
         ')";
 
-    public static string StudentsForCourse(string crn, string term)
+    public static string StudentsForCourse(string[] crns, string term)
     {
+        string inClause = "(" + string.Join(",", crns) + ")";
         string query = $@"select * from openquery (sis, '
-            select sfrstcr_term_code, sfrstcr_crn, spriden_first_name, spriden_last_name, spriden_id, lower(wormoth_login_id) loginid
+            select sfrstcr_term_code, sfrstcr_crn, spriden_first_name as firstname, spriden_last_name as lastname, spriden_id as id, lower(wormoth_login_id) loginid
             from sfrstcr
             inner join spriden on sfrstcr_pidm = spriden_pidm
             inner join wormoth on sfrstcr_pidm = wormoth_pidm
             where sfrstcr_term_code = { term }
-            and sfrstcr_crn = { crn }
+            and sfrstcr_crn in { inClause }
             and sfrstcr_rsts_code in (''RE'', ''RW'')
             and SPRIDEN_CHANGE_IND is null
             and wormoth_acct_type = ''Z''
