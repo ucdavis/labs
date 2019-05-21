@@ -9,6 +9,10 @@
     <h1 class="display-4">Welcome</h1>
     <form asp-action="Index" method="post">
         <div className="form-horizontal">
+            @for (int i = 0; i < Model.Terms.Count; i++)
+            {
+                @Html.HiddenFor(m => m.Terms[i])
+            }
             <div class="form-group">
                 <select asp-for="SearchTerm" class="form-control">
                     @foreach( var term in Model.Terms) {
@@ -21,38 +25,73 @@
             </div>
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Submit" class="btn btn-default" />
+                    <input type="submit" value="Submit" class="btn btn-primary" />
             </div>
         </div>
     </form>
 </div>
 
-@if (Model.Results != null && Model.Results.Students != null && Model.Results.Students.Count > 0)
+@if (Model.Results != null && Model.Results.StudentsWithCards != null && Model.Results.StudentsWithCards.Count > 0)
 {
     <div style="padding-top: 15px">
         <div class="card">
             <div class="card-header">
-                <h2>Students</h2>
-                @foreach(var student in Model.Results.Students)
-                {
-                    <p>@student.FirstName @student.LastName</p>
-                }
+                <h2>Students With Cards</h2>
+                <table class="table dataTable">
+                    <thead>
+                        <tr>
+                            <td>Employee ID</td>
+                            <td>Last Name</td>
+                            <td>First Name</td>
+                            <td>Department</td>
+                            <td>Encoded Card No.</td>
+                            <td>Expiration</td>
+                            <td>Active</td>
+                            <td>Access 1</td>
+                            <td>Access 2</td>
+                            <td>Facility</td>
+                            <td>Format</td>
+                            <td>Email</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach(var student in Model.Results.StudentsWithCards)
+                        {
+                        <tr>
+                            <td>@student.Id</td>
+                            <td>@student.LastName</td>
+                            <td>@student.FirstName</td>
+                            <td>@student.Department</td>
+                            <td>@student.strEncodedCardNumber</td>
+                            <td>@student.dtExpirationDate</td>
+                            <td>@student.nActive</td>
+                            <td>@student.Access1</td>
+                            <td>@student.Access2</td>
+                            <td>@student.nFacilityCode</td>
+                            <td>@student.strCardFormatName</td>
+                            <td>email</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+               
             </div>
         </div>
     </div>
 }
 
-@if (Model.Results != null && Model.Results.Cards != null && Model.Results.Cards.Count > 0)
+@if (Model.Results != null && Model.Results.StudentsWithoutCards != null && Model.Results.StudentsWithoutCards.Count > 0)
 {
     <div style="padding-top: 15px">
         <div class="card">
             <div class="card-header">
-                <h2>Cards</h2>
-                @foreach(var card in Model.Results.Cards)
+                <h2>Students</h2>
+                @foreach(var student in Model.Results.StudentsWithoutCards)
                 {
-                    <p>@card.strFirstName @card.strLastName</p>
+                    <p>@student.FirstName @student.LastName</p>
+                    <p>@student.CardId</p>
                 }
-            </div>                
+            </div>
         </div>
     </div>
 }

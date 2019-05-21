@@ -22,10 +22,11 @@ namespace Labs.Mvc.Controllers
         public async Task<IActionResult> Index()
         {
             var conn = this.configuration.GetConnectionString("DefaultConnection");
-            
-            using (var db = new DbManager(conn)) {
 
-                var terms  = await db.Connection.QueryAsync<TermModel>(Queries.Terms);
+            using (var db = new DbManager(conn))
+            {
+
+                var terms = await db.Connection.QueryAsync<TermModel>(Queries.Terms);
                 var model = new BulkModel();
                 model.Terms = terms.ToList();
                 return View(model);
@@ -35,15 +36,52 @@ namespace Labs.Mvc.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(BulkModel model)
         {
-            var conn = this.configuration.GetConnectionString("DefaultConnection");
-            
-            using (var db = new DbManager(conn)) {
+            if (String.IsNullOrWhiteSpace(model.SearchCourses) || String.IsNullOrWhiteSpace(model.SearchTerm))
+            {
+                throw new Exception();
+            }
 
-                var students  = await db.Connection.QueryAsync<StudentModel>(Queries.StudentsForCourse(model.SearchCourses, model.SearchTerm));
-                var studentIds = students.Select(x => x.Id).ToList();
+            var conn = this.configuration.GetConnectionString("DefaultConnection");
+
+            const string regex = @"\d{5}";
+            var courses = System.Text.RegularExpressions.Regex.Matches(model.SearchCourses, regex);
+            using (var db = new DbManager(conn))
+            {
+
+                var terms = await db.Connection.QueryAsync<TermModel>(Queries.Terms);
+                var students = new List<StudentModel>();
+                foreach (var course in courses)
+                {
+                    var studentsFromCourse = await db.Connection.QueryAsync<StudentModel>(Queries.StudentsForCourse(course.ToString(), model.SearchTerm));
+                    students.AddRange(studentsFromCourse.ToList());
+                }
+
+                var studentIds = students.Select(x => x.Id).ToList().Distinct();
                 var cards = await db.Connection.QueryAsync<CardModel>(Queries.CardholdInfo, new { ids = studentIds });
-                model.Results.Cards = cards.ToList();
-                model.Results.Students = students.ToList();
+                var result = from student in students.Distinct()
+                             join card in cards on student.Id equals card.strEmployeeId into cardGroup
+                             from item in cardGroup.DefaultIfEmpty(new CardModel { CardsId = String.Empty })
+                             select new StudentXCardModel
+                             {
+                                FirstName = student.FirstName,
+                                LastName = student.LastName,
+                                LoginId = student.LoginId,
+                                Id = student.Id,
+                                CardId = item.CardsId,
+                                nCardholderId = item.nCardholderId,
+                                Department = item.Department,
+                                strEncodedCardNumber = item.strCardFormatName,
+                                dtExpirationDate = item.dtExpirationDate,
+                                nActive = item.nActive,
+                                Access1 = item.Access1,
+                                Access2 = item.Access2,
+                                nFacilityCode = item.nFacilityCode,
+                                strCardFormatName = item.strCardFormatName
+                             };
+                model.Terms = terms.ToList();
+                model.Results.StudentsWithCards = result.Where(x => !String.IsNullOrEmpty(x.CardId)).ToList();
+                model.Results.StudentsWithoutCards = result.Where(x => String.IsNullOrEmpty(x.CardId)).ToList();
+
                 return View(model);
             }
         }
@@ -54,12 +92,14 @@ namespace Labs.Mvc.Controllers
         }
 
         [HttpGet]
-        public IActionResult Query() {
+        public IActionResult Query()
+        {
             var conn = this.configuration.GetConnectionString("DefaultConnection");
-            
-            using (var db = new DbManager(conn)) {
 
-                var result = db.Connection.Query(Queries.CardholdInfo, new { ids = new [] { "999811562" }});
+            using (var db = new DbManager(conn))
+            {
+
+                var result = db.Connection.Query(Queries.CardholdInfo, new { ids = new[] { "999811562" } });
                 return Json(result);
             }
         }

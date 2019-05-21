@@ -8,10 +8,10 @@ namespace Labs.Mvc.Models
     public class ResultModel
     {
         public ResultModel() {
-            Students = new List<StudentModel>();
-            Cards = new List<CardModel>();
+            StudentsWithoutCards = new List<StudentXCardModel>();
+            StudentsWithCards = new List<StudentXCardModel>();
         }
-        public IList<StudentModel> Students { get; set; }
-        public IList<CardModel> Cards { get; set; }
+        public IList<StudentXCardModel> StudentsWithoutCards { get; set; }
+        public IList<StudentXCardModel> StudentsWithCards { get; set; }
     }
 }
