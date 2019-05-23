@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -8,10 +8,11 @@ using Labs.Mvc.Models;
 using AnlabMvc.Helpers;
 using Dapper;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Labs.Mvc.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : SuperController
     {
         private readonly IConfiguration configuration;
 
