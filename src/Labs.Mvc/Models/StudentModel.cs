@@ -8,12 +8,13 @@ namespace Labs.Mvc.Models
     public class StudentModel
     {
         public string FirstName { get; set; }
+
         public string LastName { get; set; }
 
         public string Id { get; set; }
 
-        public string LoginId { get; set; }
+        public string Email { get; set; }
 
-        //TODO add email, program type
+        public string Program { get; set; }
     }
 }

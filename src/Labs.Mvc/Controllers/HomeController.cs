@@ -64,7 +64,6 @@ namespace Labs.Mvc.Controllers
                              {
                                 FirstName = student.FirstName,
                                 LastName = student.LastName,
-                                LoginId = student.LoginId,
                                 Id = student.Id,
                                 CardId = item.CardsId,
                                 nCardholderId = item.nCardholderId,
@@ -75,7 +74,9 @@ namespace Labs.Mvc.Controllers
                                 Access1 = item.Access1,
                                 Access2 = item.Access2,
                                 nFacilityCode = item.nFacilityCode,
-                                strCardFormatName = item.strCardFormatName
+                                strCardFormatName = item.strCardFormatName,
+                                Email = student.Email,
+                                Program = student.Program
                              };
                 model.Terms = terms.ToList();
                 model.StudentsWithCards = result.Where(x => !String.IsNullOrEmpty(x.CardId)).ToList();

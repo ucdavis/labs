@@ -43,7 +43,6 @@
                             <td>Employee ID</td>
                             <td>Last Name</td>
                             <td>First Name</td>
-                            <td>Kerb</td>
                             <td>Email</td>
                         </tr>
                     </thead>
@@ -54,8 +53,7 @@
                             <td>@student.Id</td>
                             <td>@student.LastName</td>
                             <td>@student.FirstName</td>
-                            <td>@student.LoginId</td>
-                            <td>example@email.com</td>
+                            <td>@student.Email</td>
                         </tr>
                         }
                     </tbody>
@@ -85,6 +83,7 @@
                             <td>Access 2</td>
                             <td>Facility</td>
                             <td>Format</td>
+                            <td>Program</td>
                             <td>Email</td>
                         </tr>
                     </thead>
@@ -103,7 +102,8 @@
                             <td>@student.Access2</td>
                             <td>@student.nFacilityCode</td>
                             <td>@student.strCardFormatName</td>
-                            <td>email</td>
+                            <td>@student.Program</td>
+                            <td>@student.Email</td>
                         </tr>
                         }
                     </tbody>
@@ -127,6 +127,7 @@
         $(function() {
             var table = $("#with").DataTable({
                 "dom": 'lBfrtip',
+                "scrollX": true
             });
             var table = $("#without").DataTable({
                 "dom": 'lBfrtip',
