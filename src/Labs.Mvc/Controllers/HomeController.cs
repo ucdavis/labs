@@ -8,10 +8,11 @@ using Labs.Mvc.Models;
 using AnlabMvc.Helpers;
 using Dapper;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Labs.Mvc.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : SuperController
     {
         private readonly IConfiguration configuration;
 
@@ -36,19 +37,22 @@ namespace Labs.Mvc.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(BulkModel model)
         {
-            if (String.IsNullOrWhiteSpace(model.SearchCourses) || String.IsNullOrWhiteSpace(model.SearchTerm))
-            {
-                throw new Exception();
-            }
 
             var conn = this.configuration.GetConnectionString("DefaultConnection");
 
-            const string regex = @"\d{5}";
-            var courses = System.Text.RegularExpressions.Regex.Matches(model.SearchCourses, regex).Select(x => x.Value).ToArray();
             using (var db = new DbManager(conn))
             {
 
-                var terms = await db.Connection.QueryAsync<TermModel>(Queries.Terms);
+                var terms = await db.Connection.QueryAsync<TermModel>(Queries.Terms); // TODO: figure out a way to not have to fetch this again
+                model.Terms = terms.ToList();
+                if (String.IsNullOrWhiteSpace(model.SearchCourses) || String.IsNullOrWhiteSpace(model.SearchTerm))
+                {
+                    ErrorMessage = "You must select something to search";
+                    return View(model);
+                }
+
+                const string regex = @"\d{5}";
+                var courses = System.Text.RegularExpressions.Regex.Matches(model.SearchCourses, regex).Select(x => x.Value).ToArray();
                 var students = await db.Connection.QueryAsync<StudentModel>(Queries.StudentsForCourse(courses, model.SearchTerm));
 
                 var studentIds = students.Select(x => x.Id).ToList().Distinct();

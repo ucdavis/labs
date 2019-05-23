@@ -37,12 +37,36 @@
                         </li>
                     </ul>
                 </div>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div style="flex-shrink: 0" class="form-inline mt-2 mt-md-0">
+                        <form class="flexer" asp-area="" asp-controller="Account" asp-action="Logout">
+                            <button type="submit" class="btn btn-light" style="margin-left: 8px;">Sign out</button>
+                        </form>
+                    </div>
+                }
             </div>
         </nav>
     </header>
     <div class="container">
         <partial name="_CookieConsentPartial" />
         <main role="main" class="pb-3">
+             @if (!string.IsNullOrWhiteSpace(TempData["ErrorMessage"] as string))
+        {
+            <div class="container">
+                <div class="alert alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">×</button> @TempData["ErrorMessage"]
+                </div>
+            </div>
+        }
+        @if (!string.IsNullOrWhiteSpace(TempData["Message"] as string))
+        {
+            <div class="container">
+                <div class="alert alert-info">
+                    <button type="button" class="close" data-dismiss="alert">×</button> @TempData["Message"]
+                </div>
+            </div>
+        }
             @RenderBody()
         </main>
     </div>
