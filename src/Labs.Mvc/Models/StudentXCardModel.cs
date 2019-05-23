@@ -12,8 +12,6 @@ namespace Labs.Mvc.Models
 
         public string Id { get; set; }
 
-        public string LoginId { get; set; }
-
         public string CardId { get; set; }
         
         public string nCardholderId { get; set; }
@@ -33,5 +31,9 @@ namespace Labs.Mvc.Models
         public string nFacilityCode { get; set; }
 
         public string strCardFormatName { get; set; }
+
+        public string Program { get; set; }
+
+        public string Email { get; set; }
     }
 }

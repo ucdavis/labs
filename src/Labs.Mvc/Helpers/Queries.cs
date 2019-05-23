@@ -8,22 +8,31 @@ public static class Queries
             order by stvterm_start_date asc
         ')";
 
-    public static string StudentsForCourse(string[] crns, string term)
+        public static string StudentsForCourse(string[] crns, string term)
     {
         string inClause = "(" + string.Join(",", crns) + ")";
         string query = $@"select * from openquery (sis, '
-            select sfrstcr_term_code, sfrstcr_crn, spriden_first_name as firstname, spriden_last_name as lastname, spriden_id as id, lower(wormoth_login_id) loginid
-            from sfrstcr
-            inner join spriden on sfrstcr_pidm = spriden_pidm
-            inner join wormoth on sfrstcr_pidm = wormoth_pidm
-            where sfrstcr_term_code = { term }
-            and sfrstcr_crn in { inClause }
-            and sfrstcr_rsts_code in (''RE'', ''RW'')
-            and SPRIDEN_CHANGE_IND is null
-            and wormoth_acct_type = ''Z''
-            and wormoth_acct_status = ''A''
-            and wormoth_activity_date = ( select max(wormoth_activity_date ) from wormoth iw where iw.WORMOTH_PIDM = wormoth.wormoth_pidm and iw.wormoth_acct_type = ''Z'' and iw.wormoth_acct_status = ''A'' )
-')";
+                        select
+                            sfrstcr_term_code as code,
+                            spriden_id as id,
+                            spriden_last_name as lastName,
+                            spriden_first_name AS firstName,
+                            goremal_email_address AS email,
+                            sfrstcr_crn AS CRN,
+                            SGVCLAS_LEVL_CODE AS program
+                        from spriden
+                        inner join sfrstcr on spriden_pidm = sfrstcr_pidm
+                        -- the following join accounts for UCD email address only!
+                        inner join sgvclas on spriden_pidm = SGVCLAS_PIDM
+                            and sfrstcr_term_code = SGVCLAS_TERM_CODE
+                        left join goremal on goremal_pidm = spriden_pidm
+                        and goremal_status_ind = ''A''
+                        and goremal_emal_code = ''UCD''
+                        where spriden_change_ind IS NULL -- required to filter only the most up-to-date student name on file
+                        and sfrstcr_term_code = { term }
+                        and sfrstcr_crn in { inClause }
+                        and sfrstcr_rsts_code = ''RE'' -- RE = registered
+                        ')";
 
         return query;
     }
