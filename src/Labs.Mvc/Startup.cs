@@ -28,6 +28,8 @@ namespace Labs.Mvc
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<AuthSettings>(Configuration.GetSection("Authentication"));
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -45,7 +47,7 @@ namespace Labs.Mvc
             })
             .AddCAS(options =>
             {
-                options.CasServerUrlBase = Configuration["CasBaseUrl"];   // Set in `appsettings.json` file.
+                options.CasServerUrlBase = Configuration["Authentication:CasBaseUrl"];   // Set in `appsettings.json` file.
                 options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

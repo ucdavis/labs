@@ -37,6 +37,14 @@
                         </li>
                     </ul>
                 </div>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div style="flex-shrink: 0" class="form-inline mt-2 mt-md-0">
+                        <form class="flexer" asp-area="" asp-controller="Account" asp-action="Logout">
+                            <button type="submit" class="btn btn-light" style="margin-left: 8px;">Sign out</button>
+                        </form>
+                    </div>
+                }
             </div>
         </nav>
     </header>
