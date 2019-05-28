@@ -22,16 +22,15 @@ public static class Queries
                             SGVCLAS_LEVL_CODE AS program
                         from spriden
                         inner join sfrstcr on spriden_pidm = sfrstcr_pidm
-                        -- the following join accounts for UCD email address only!
                         inner join sgvclas on spriden_pidm = SGVCLAS_PIDM
                             and sfrstcr_term_code = SGVCLAS_TERM_CODE
                         left join goremal on goremal_pidm = spriden_pidm
                         and goremal_status_ind = ''A''
                         and goremal_emal_code = ''UCD''
-                        where spriden_change_ind IS NULL -- required to filter only the most up-to-date student name on file
+                        where spriden_change_ind IS NULL
                         and sfrstcr_term_code = { term }
                         and sfrstcr_crn in { inClause }
-                        and sfrstcr_rsts_code = ''RE'' -- RE = registered
+                        and sfrstcr_rsts_code = ''RE''
                         ')";
 
         return query;
