@@ -20,7 +20,7 @@ namespace Labs.Mvc.Models
         
         public DateTime dtExpirationDate { get; set; }
         
-        public bool nActive { get; set; }
+        public string nActive { get; set; }
         
         public string Access1 { get; set; }
         
