@@ -4,7 +4,7 @@ public static class Queries
         select * from openquery (sis, '
             select stvterm_code as code, stvterm_desc as description, stvterm_start_date as startdate, stvterm_end_date as enddate from stvterm
             where stvterm_end_date > sysdate
-            and (stvterm_trmt_code = 'Q' or stvterm_trmt_code = 'W')
+            and (stvterm_trmt_code = ''Q' or stvterm_trmt_code = ''W'')
             and rownum< 20
             order by stvterm_start_date asc
         ')";
