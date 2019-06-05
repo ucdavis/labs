@@ -20,5 +20,6 @@ namespace Labs.Mvc.Models
 
         public IList<StudentXCardModel> StudentsWithoutCards { get; set; }
         public IList<StudentXCardModel> StudentsWithCards { get; set; }
+        public IList<StudentXCardModel> StudentsWithProblems { get; set; }
     }
 }
