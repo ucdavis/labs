@@ -146,14 +146,32 @@
             var table = $("#with").DataTable({
                 "dom": 'lBfrtip',
                 "buttons": [
-                    'copyHtml5', 'excelHtml5', 'csvHtml5', 'print'
+                    'copy', 
+                    {
+                        extend: 'excel',
+                        title: null
+                    },
+                    {
+                        extend: 'csv',
+                        title: null
+                    },
+                    'print'
                 ],
                 "scrollX": true
             });
             var table = $("#without").DataTable({
                 "dom": 'lBfrtip',
                 "buttons": [
-                    'copyHtml5', 'excelHtml5', 'csvHtml5', 'print'
+                    'copy', 
+                    {
+                        extend: 'excel',
+                        title: null
+                    },
+                    {
+                        extend: 'csv',
+                        title: null
+                    },
+                    'print'
                 ],
                 "scrollX": true
             });
