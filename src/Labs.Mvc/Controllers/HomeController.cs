@@ -68,7 +68,7 @@ namespace Labs.Mvc.Controllers
                                 CardId = item.CardsId,
                                 nCardholderId = item.nCardholderId,
                                 Department = item.Department,
-                                strEncodedCardNumber = item.strCardFormatName,
+                                strEncodedCardNumber = item.strEncodedCardNumber,
                                 dtExpirationDate = item.dtExpirationDate,
                                 nActive = item.nActive,
                                 Access1 = item.Access1,
