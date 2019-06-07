@@ -79,9 +79,9 @@ namespace Labs.Mvc.Controllers
                                 Program = student.Program
                              };
                 model.Terms = terms.ToList();
-                model.StudentsWithCards = result.Where(x => !String.IsNullOrEmpty(x.CardId)).ToList();
+                model.StudentsWithCards = result.Where(x => checkValid(x) && !String.IsNullOrEmpty(x.CardId)).ToList();
                 model.StudentsWithoutCards = result.Where(x => String.IsNullOrEmpty(x.CardId)).ToList();
-
+                model.StudentsWithProblems = result.Where(x => !checkValid(x) && !String.IsNullOrEmpty(x.CardId)).ToList();
                 return View(model);
             }
         }
@@ -108,6 +108,17 @@ namespace Labs.Mvc.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private bool checkValid(StudentXCardModel student) {
+            if(student.nActive == "0" || student.dtExpirationDate < DateTime.Today)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
     }
 }

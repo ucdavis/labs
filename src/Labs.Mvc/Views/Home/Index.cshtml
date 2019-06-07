@@ -131,6 +131,56 @@
     </div>
 }
 
+@if (Model.StudentsWithProblems != null && Model.StudentsWithProblems.Count > 0)
+{
+    <div style="padding-top: 15px">
+        <div class="card">
+            <div class="card-header">
+                <h2>Students With Problems</h2>
+                <table id="problems" class="table dataTable">
+                    <thead>
+                        <tr>
+                            <td>Employee ID</td>
+                            <td>Last Name</td>
+                            <td>First Name</td>
+                            <td>Dept</td>
+                            <td>Encoded Card No.</td>
+                            <td>Expiration</td>
+                            <td>Active</td>
+                            <td>Access 1</td>
+                            <td>Access 2</td>
+                            <td>Facility</td>
+                            <td>Format</td>
+                            <td>Program</td>
+                            <td>Email</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach(var student in Model.StudentsWithProblems)
+                        {
+                        <tr>
+                            <td>@student.Id</td>
+                            <td>@student.LastName</td>
+                            <td>@student.FirstName</td>
+                            <td>@student.Department</td>
+                            <td>@student.strEncodedCardNumber</td>
+                            <td>@student.dtExpirationDate</td>
+                            <td>@student.nActive</td>
+                            <td>@student.Access1</td>
+                            <td>@student.Access2</td>
+                            <td>@student.nFacilityCode</td>
+                            <td>@student.strCardFormatName</td>
+                            <td>@student.Program</td>
+                            <td>@student.Email</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table> 
+            </div>
+        </div>
+    </div>
+}
+
 @section Scripts
 {
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
@@ -173,6 +223,10 @@
                     },
                     'print'
                 ],
+                "scrollX": true
+            });
+            var table = $("#problems").DataTable({
+                "dom": 'lBfrtip',
                 "scrollX": true
             });
         });
