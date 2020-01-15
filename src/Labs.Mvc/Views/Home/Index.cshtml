@@ -14,14 +14,17 @@
                 @Html.HiddenFor(m => m.Terms[i])
             }
             <div class="form-group">
+                <label>Quarter</label>
                 <select asp-for="SearchTerm" class="form-control">
                     @foreach( var term in Model.Terms) {
-                        <option value="@term.Code">@term.Description</option>
+                        <option value="@term.Code">@term.Description (@term.StartDate.ToString("d") - @term.EndDate.ToString("d"))</option>
                     }
                 </select>
             </div>
             <div class="form-group">
-                <textarea asp-for="SearchCourses" class="form-control"></textarea>
+                <label>5 digit CRNs</label>
+                <textarea asp-for="SearchCourses" class="form-control" placeholder="11111,22222, 33333 44444"></textarea>
+                <span>CRNs do not have to be in a special format, they just need to be 5 digits separated somehow. commas, spacing, and non-numerical characters will be ignored.</span>
             </div>
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
