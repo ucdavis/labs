@@ -77,19 +77,6 @@ namespace Labs.Mvc.Controllers
             return View();
         }
 
-        [HttpGet]
-        public IActionResult Query()
-        {
-            var conn = this.configuration.GetConnectionString("DefaultConnection");
-
-            using (var db = new DbManager(conn))
-            {
-
-                var result = db.Connection.Query(Queries.CardholdInfo, new { ids = new[] { "999811562" } });
-                return Json(result);
-            }
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
