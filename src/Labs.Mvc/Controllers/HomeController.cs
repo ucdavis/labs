@@ -56,32 +56,18 @@ namespace Labs.Mvc.Controllers
                 var students = await db.Connection.QueryAsync<StudentModel>(Queries.StudentsForCourse(courses, model.SearchTerm));
 
                 var studentIds = students.Select(x => x.Id).ToList().Distinct();
-                var cards = await db.Connection.QueryAsync<CardModel>(Queries.CardholdInfo, new { ids = studentIds });
+
                 var result = from student in students.Distinct()
-                             join card in cards on student.Id equals card.strEmployeeId into cardGroup
-                             from item in cardGroup.DefaultIfEmpty(new CardModel { CardsId = String.Empty })
                              select new StudentXCardModel
                              {
                                 FirstName = student.FirstName,
                                 LastName = student.LastName,
                                 Id = student.Id,
-                                CardId = item.CardsId,
-                                nCardholderId = item.nCardholderId,
-                                Department = item.Department,
-                                strEncodedCardNumber = item.strEncodedCardNumber,
-                                dtExpirationDate = item.dtExpirationDate,
-                                nActive = item.nActive,
-                                Access1 = item.Access1,
-                                Access2 = item.Access2,
-                                nFacilityCode = item.nFacilityCode,
-                                strCardFormatName = item.strCardFormatName,
                                 Email = student.Email,
                                 Program = student.Program
                              };
                 model.Terms = terms.ToList();
-                model.StudentsWithCards = result.Where(x => checkValid(x) && !String.IsNullOrEmpty(x.CardId)).ToList();
                 model.StudentsWithoutCards = result.Where(x => String.IsNullOrEmpty(x.CardId)).ToList();
-                model.StudentsWithProblems = result.Where(x => !checkValid(x) && !String.IsNullOrEmpty(x.CardId)).ToList();
                 return View(model);
             }
         }
