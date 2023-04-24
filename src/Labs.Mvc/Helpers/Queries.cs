@@ -36,17 +36,4 @@ public static class Queries
 
         return query;
     }
-
-    public static string CardholdInfo = @"
-    SELECT [CardsID], cardholders.[nCardholderID], [strEmployeeID], [strFirstName], [strLastName], pulldownlists.[strFieldValue] as Department,
-    [strEncodedCardNumber], [dtExpirationDate], [nActive], accesslevels1.strAccessLevelName Access1, accesslevels2.strAccessLevelName Access2,
-    [nFacilityCode], [strCardFormatName]
-    FROM [MILLENNIUM].[iAccess2_1].[dbo].[Cards] cards
-    inner join [MILLENNIUM].[iAccess2_1].[dbo].[Cardholders] cardholders on cardholders.[nObjectID] = cards.[nCardholderID]
-    inner join [MILLENNIUM].[iAccess2_1].[dbo].[AccessLevels] accesslevels1 on accesslevels1.[nAccessLevelID] = cards.[nAccessLevel1]
-    inner join [MILLENNIUM].[iAccess2_1].[dbo].[AccessLevels] accesslevels2 on accesslevels2.[nAccessLevelID] = cards.[nAccessLevel2]
-    inner join [MILLENNIUM].[iAccess2_1].[dbo].[PulldownLists] pulldownlists on pulldownlists.[nFieldID] = cardholders.[nDepartment]
-    inner join [MILLENNIUM].[iAccess2_1].[dbo].[CardFormats] cardformats on cardformats.[nCardFormatID] = cards.[CardFormatID]
-    where cardholders.[strEmployeeID] in @ids
-";
 }
